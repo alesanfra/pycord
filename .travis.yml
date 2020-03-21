@@ -2,6 +2,14 @@ language: python
 python:
   - "3.7"
 
+before_install:
+  - >
+    [ -f ffmpeg-release/ffmpeg ] || (
+        curl -O https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz &&
+        mkdir -p ffmpeg-release &&
+        tar Jxf ffmpeg-release-amd64-static.tar.xz --strip-components=1 -C ffmpeg-release
+    )
+
 install:
   - pip install -r requirements.txt
 
@@ -9,7 +17,9 @@ jobs:
   include:
     - stage: "Unit Tests"
       script:
+        - export PATH=$(readlink -f ffmpeg-release):$PATH
         - python -m unittest discover -v tests
-    - stage: "Deploy"
-      script:
-        - echo "ok"
+
+cache:
+  directories:
+    - ffmpeg-release
