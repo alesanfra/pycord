@@ -2,14 +2,33 @@ language: python
 python:
   - "3.7"
 
+before_install:
+  - >
+    [ -f ffmpeg-release/ffmpeg ] || (
+        curl -O https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz &&
+        mkdir -p ffmpeg-release &&
+        tar Jxf ffmpeg-release-amd64-static.tar.xz --strip-components=1 -C ffmpeg-release
+    )
+
 install:
-  - pip install -r requirements
+  - pip install -r requirements.txt
 
 jobs:
   include:
     - stage: "Unit Tests"
       script:
+        - export PATH=$(readlink -f ffmpeg-release):$PATH
         - python -m unittest discover -v tests
-    - stage: "Deploy"
-      script:
-        - echo "ok"
+
+cache:
+  directories:
+    - ffmpeg-release
+
+deploy:
+  provider: pypi
+  user: __token__
+  password:
+    secure: SGUU2qrpz0Q2iJ3Z+lc8u8q0qb9mdu1xWpUOM1JTDyS7Oa0XHKvdFKSelustm5kIc0wsraLdesXIA+LrnRl2qAp7RtRk12iWHc2v6tztmxttOfYfMo6KGslXbPgbb66hgluOSEedJe/fUar+WeXTRW/ikHD1w3Zx3ARHi/I4wZLqZogCWn/tUR3HWOOwJwPsdlWoHaIgJ1roCevejnwqfHGIlouUkwrmgEKNN7CaDb02/cVENhikDqzdz8xfIgnf8zGfZC8f3dLBXeJxEhCJkmJZyo+/zf7c3MRIweXLmYHTzSsT5nk85SNtZzuEgAifUeTYBIXvlNjCgTzM0HxNwajJNOWIwIMclYojQr4vE7Wae6vETUwDjwHjP6ErtPDqzZMfD8p5CAWRMgiw4bbTpvMKP9VbK1M3bRTAWlHyxoP30i0Qo4mbHL2qF574qWHFz9rYQJKZIfbbwxbKTJ9c5+N+Xqfw/5/jHy24d/5QXpaqkFPbGLfuzY8JXx/fdF4B0ko/08VbwjB5X/mw+XDbvcOZqibvctdU81acUzfHkh1g126MLx2Rzq5X/oo2Xa7X92nkwI+lOtltbH3j62J3f7VHMd8apYsEfm5+3deQDqn/g6tmlqJ87pmQs4SkttyrXwx0gp+f+9pbWQUKOAagN/7NDPhRA1XvQsSkdeK48pc=
+  on:
+    tags: true
+  skip_existing: true
