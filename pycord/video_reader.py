@@ -1,4 +1,5 @@
 import ffmpeg
+import imageio_ffmpeg
 import numpy
 
 
@@ -10,6 +11,7 @@ class VideoReader:
         self.height = int(video_info['height'])
         self.num_frames = int(video_info['nb_frames'])
         self.stream = ffmpeg.input(uri)
+        self.executable = imageio_ffmpeg.get_ffmpeg_exe()
 
     def __len__(self):
         return self.num_frames
@@ -52,6 +54,6 @@ class VideoReader:
         out, err = self.stream \
             .filter_('select', 'gte(n,{})'.format(start)) \
             .output('pipe:', format='rawvideo', pix_fmt='rgb24', vframes=count) \
-            .run(capture_stdout=True, capture_stderr=True)
+            .run(cmd=self.executable, capture_stdout=True, capture_stderr=True)
 
         return numpy.frombuffer(out, numpy.uint8).reshape([count, self.height, self.width, 3])
