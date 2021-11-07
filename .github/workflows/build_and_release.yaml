@@ -14,28 +14,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
-        run: |
-          python -m pip install -r requirements.txt
-          python -m pip install pytest pytest-cov
 
       - name: Install ffmpeg
         run: |
-          curl -O https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
-          mkdir -p ffmpeg-release
-          tar Jxf ffmpeg-release-amd64-static.tar.xz --strip-components=1 -C ffmpeg-release
-          echo $(readlink -f ffmpeg-release) >> $GITHUB_PATH
-
-      - name: Test
-        run: |
-          ls -alth
-          echo $PATH
-          echo $GITHUB_PATH
-          python -m pytest --cov=pycord tests/
+          sudo apt-get install -y ffmpeg
 
       - name: Install pypa/build
         run: |
@@ -44,6 +31,14 @@ jobs:
       - name: Build a binary wheel and a source tarball
         run: |
           python -m build --wheel --outdir dist/ .
+
+      - name: Install package
+        run: |
+          python -m pip install 'pycord[dev]' --find-links dist
+
+      - name: Run tests
+        run: |
+          pytest --cov=pycord tests/
 
       - name: Upload wheels
         uses: actions/upload-artifact@v2
