@@ -33,6 +33,8 @@ jobs:
 
       - name: Test
         run: |
+          ls -alth
+          echo $PATH
           python -m pytest --cov=pycord tests/
       - name: Upload coverage reports
         run: |
