@@ -12,7 +12,7 @@ if os.path.isfile(requirements):
 setup(
     name='pycord',
     packages=['pycord'],
-    version='0.0.1',
+    version='0.1.0',
     description='Convenient wrapper on FFmpeg',
     author='Alessio Sanfratello',
     url='https://github.com/alesanfra/pycord',
