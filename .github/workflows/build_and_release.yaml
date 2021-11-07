@@ -29,6 +29,7 @@ jobs:
           curl -O https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
           mkdir -p ffmpeg-release
           tar Jxf ffmpeg-release-amd64-static.tar.xz --strip-components=1 -C ffmpeg-release
+          export PATH=$(readlink -f ffmpeg-release):$PATH
 
       - name: Test
         run: |
