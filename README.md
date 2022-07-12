@@ -28,6 +28,6 @@ Any contribution is welcome as long as it is implemented in pure python.
 
 ## I'm looking for something faster...
 
-If you think **pycord** is slow, and you don't mind to deal directly with come low-level code, 
+If you think **pycord** is slow, and you don't mind to deal directly with some low-level code, 
 take a look to my other project [iterframes](https://github.com/alesanfra/iterframes)!
 It's a python module implemented in [Rust](https://www.rust-lang.org) with the aim to be as fast as possible.
