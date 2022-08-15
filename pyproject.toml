@@ -21,6 +21,20 @@ dev = [
     "pytest-cov",
 ]
 
-
 [project.urls]
 Home = "https://github.com/alesanfra/pycord"
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-v -m \"not benchmark\""
+testpaths = ["tests"]
+markers = [
+    "benchmark: perform benchmarks against an equivalent python implementation",
+]
