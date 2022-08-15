@@ -10,7 +10,9 @@ from pycord.video_reader import VideoReader
 
 
 class TestVideoReader(TestCase):
-    DATA_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), 'data', 'video.mp4'))
+    DATA_PATH = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "data", "video.mp4")
+    )
 
     def test_get_batch(self):
         vr = VideoReader(self.DATA_PATH)
